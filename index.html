@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>HYBRID Fit — Avaliação Físico-Funcional</title>
+<meta name="theme-color" content="#0a3138">
+<meta name="description" content="Avaliação físico-funcional para idosos, adultos e atletas.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="HYBRID Fit">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#131d1b;--paper:#f5f3ec;--surface:#ffffff;--line:#d9d6cb;
+    --petrol:#0e4a54;--petrol-deep:#0a3138;--amber:#b8791a;
+    --good:#2c7a55;--warn:#c08319;--alert:#b03e2a;--muted:#5f6b67;
+    --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',system-ui,sans-serif;--display:'Archivo',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:0 18px 90px}
+
+  header{background:var(--petrol-deep);color:#eef2f0;padding:calc(18px + env(safe-area-inset-top)) 18px 18px;margin-bottom:16px;border-bottom:3px solid var(--amber)}
+  .head-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand-logo{width:42px;height:42px;border-radius:11px;flex-shrink:0}
+  .brand-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#7fb3ba;margin-bottom:3px}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(18px,4vw,25px);line-height:1.02;letter-spacing:-.01em}
+  .who{font-family:var(--mono);font-size:11px;color:#9fc0c4;text-align:right;line-height:1.5}
+  .who b{color:#eef2f0;font-weight:600}
+
+  .tabs{display:flex;gap:5px;margin-bottom:18px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+  .tab{flex:0 0 auto;font-family:var(--display);font-weight:700;font-size:13px;padding:10px 15px;border-radius:9px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer;white-space:nowrap}
+  .tab[aria-selected=true]{background:var(--petrol);color:#fff;border-color:var(--petrol)}
+  .tab .num{font-family:var(--mono);font-size:10px;opacity:.7;margin-right:5px}
+
+  .panel{display:none}.panel.active{display:block}
+  section.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px}
+  .card h2{font-family:var(--display);font-weight:700;font-size:16px;margin-bottom:3px}
+  .card h2 .tag{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-left:8px;vertical-align:middle}
+  .card .sub{font-size:12.5px;color:var(--muted);margin-bottom:15px}
+
+  label{display:block;font-size:11.5px;font-weight:600;color:var(--muted);margin-bottom:4px}
+  input,select,textarea{width:100%;font-family:var(--sans);font-size:14.5px;color:var(--ink);padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#fcfbf7}
+  input[type=number]{font-family:var(--mono)}
+  textarea{resize:vertical;min-height:64px;line-height:1.45}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--petrol);outline-offset:-1px;border-color:var(--petrol)}
+  .grid{display:grid;gap:11px}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
+  .g4{grid-template-columns:repeat(auto-fit,minmax(105px,1fr))}
+  .divider{height:1px;background:#ededed;margin:16px 0}
+
+  .metric{padding:13px 0;border-top:1px solid #ededed}.metric:first-of-type{border-top:none}
+  .metric-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
+  .metric-name{font-weight:600;font-size:13.5px}
+  .metric-val{font-family:var(--mono);font-weight:600;font-size:14px;white-space:nowrap}
+  .metric-val .unit{color:var(--muted);font-weight:400;font-size:11px}
+  .metric-val .empty{color:#b7b3a7;font-weight:400}
+  .ruler{position:relative;height:32px;margin-top:3px}
+  .ruler-track{display:flex;height:13px;border-radius:7px;overflow:hidden;border:1px solid rgba(0,0,0,.06)}
+  .band{height:100%}
+  .band-labels{display:flex;margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--muted)}
+  .band-labels span{text-align:center;line-height:1.15;padding:0 1px}
+  .needle{position:absolute;top:-3px;width:2px;height:19px;background:var(--ink);border-radius:2px;transition:left .35s cubic-bezier(.2,.7,.2,1)}
+  .needle::after{content:'';position:absolute;top:-5px;left:-4px;border:5px solid transparent;border-top-color:var(--ink)}
+  .verdict{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;margin-top:8px;padding:3px 10px;border-radius:20px}
+  .dot{width:8px;height:8px;border-radius:50%}
+  .v-good{background:#e5f2eb;color:#1f5b3e}.v-good .dot{background:var(--good)}
+  .v-warn{background:#f8f0dc;color:#7d5610}.v-warn .dot{background:var(--warn)}
+  .v-alert{background:#f9e7e2;color:#8a2f1e}.v-alert .dot{background:var(--alert)}
+  .v-none{background:#efeee8;color:#8a867a}.v-none .dot{background:#b7b3a7}
+
+  .interp{background:var(--petrol-deep);color:#e8f0ef;border-radius:12px;padding:16px 18px;margin-bottom:14px}
+  .interp h3{font-family:var(--display);font-size:13px;letter-spacing:.03em;text-transform:uppercase;color:#7fb3ba;margin-bottom:9px}
+  .interp p{font-size:13.5px;line-height:1.55}
+  .refs{font-size:10.5px;color:var(--muted);line-height:1.55;font-family:var(--mono);margin-top:4px}
+  .refs strong{color:var(--ink);font-weight:600}
+
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{font-family:var(--mono);font-size:11px;padding:6px 11px;border:1px solid var(--line);border-radius:7px;background:#fcfbf7;cursor:pointer;color:var(--ink)}
+  .chip[aria-pressed=true]{background:var(--petrol);color:#fff;border-color:var(--petrol)}
+
+  .qrow{padding:10px 0;border-top:1px solid #ededed}.qrow:first-child{border-top:none}
+  .qrow p{font-size:13px;font-weight:500;margin-bottom:7px}
+
+  .btn{font-family:var(--display);font-weight:700;font-size:13.5px;padding:11px 17px;border-radius:9px;border:none;cursor:pointer}
+  .btn-primary{background:var(--amber);color:#241703}
+  .btn-petrol{background:var(--petrol);color:#fff}
+  .btn-ghost{background:transparent;color:var(--petrol);border:1.5px solid var(--petrol)}
+  .btn-sm{font-size:12px;padding:7px 12px}
+  .btn:active{transform:translateY(1px)}
+  .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:6px}
+
+  .db-status{font-family:var(--mono);font-size:11px;color:var(--muted);margin:2px 0 14px}
+  .db-status b{color:var(--petrol)}
+  .rec{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 13px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:#fcfbf7;cursor:pointer}
+  .rec.active{border-color:var(--petrol);background:#f0f6f5;box-shadow:inset 3px 0 0 var(--petrol)}
+  .rec-main{min-width:0}
+  .rec-name{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rec-meta{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:2px}
+  .rec-cat{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:20px;background:#e8e5da;color:var(--muted)}
+  .rec-cat.idoso{background:#e5f2eb;color:#1f5b3e}.rec-cat.atleta{background:#e7eef2;color:#134a5c}.rec-cat.adulto{background:#f3ecdc;color:#7d5610}
+  .rec-actions{display:flex;gap:6px;flex-shrink:0;align-items:center}
+  .icon-btn{font-family:var(--mono);font-size:11px;padding:6px 9px;border:1px solid var(--line);border-radius:7px;background:#fff;cursor:pointer;color:var(--alert)}
+  .empty-state{text-align:center;padding:26px 10px;color:var(--muted);font-size:13px}
+  .search{margin-bottom:14px}
+
+  .disclaimer{font-size:11px;color:var(--muted);margin-top:20px;padding-top:14px;border-top:1px solid var(--line);line-height:1.5}
+  .hidden{display:none!important}
+
+  .rep-block{margin-bottom:16px}
+  .rep-block h4{font-family:var(--display);font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--petrol);border-bottom:1px solid var(--line);padding-bottom:5px;margin-bottom:9px}
+  .rep-row{display:flex;justify-content:space-between;gap:12px;font-size:13px;padding:3px 0}
+  .rep-row .k{color:var(--muted)}
+  .rep-row .v{font-family:var(--mono);font-weight:500;text-align:right}
+  .sign-line{margin-top:26px;font-size:12px;color:var(--muted);line-height:2.4}
+
+  @media (max-width:520px){.who{display:none}}
+  @media print{
+    body{background:#fff}
+    header{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 10px;margin-bottom:14px}
+    .brand-eyebrow{color:#555}.who{color:#333;display:block}.who b{color:#000}h1{color:#000}
+    .tabs,.actions,.noprint,.db-status,.search{display:none!important}
+    .panel{display:none!important}
+    #panel-relatorio{display:block!important}
+    .card,.interp{border:1px solid #999!important;background:#fff!important;color:#000!important;box-shadow:none!important}
+    @page{margin:15mm}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="head-inner">
+    <div class="brand">
+      <img class="brand-logo" src="assets/icon-192.png" alt="HYBRID Fit">
+      <div>
+        <div class="brand-eyebrow">HYBRID Fit · avaliação</div>
+        <h1>Avaliação Físico-Funcional</h1>
+      </div>
+    </div>
+    <div class="who" id="who-header">Nenhum avaliado carregado</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="tabs" role="tablist" id="tabbar">
+    <button class="tab" role="tab" aria-selected="true" onclick="setTab('banco')"><span class="num">00</span>Banco</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="setTab('anamnese')"><span class="num">01</span>Anamnese</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="setTab('antro')"><span class="num">02</span>Antropometria</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="setTab('neuro')"><span class="num">03</span>Neuromotor</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="setTab('func')"><span class="num">04</span>Funcional</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="setTab('aptidao')"><span class="num">05</span>Aptidão</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="setTab('relatorio')"><span class="num">06</span>Relatório</button>
+  </div>
+
+  <!-- 00 BANCO -->
+  <div class="panel active" id="panel-banco">
+    <section class="card">
+      <h2>Banco de avaliados</h2>
+      <p class="sub">Dados gravados apenas neste aparelho (IndexedDB). Use Exportar para backup e para transferir a outro dispositivo.</p>
+      <div class="db-status" id="db-status"></div>
+      <div class="actions" style="margin-bottom:14px">
+        <button class="btn btn-primary btn-sm" onclick="newRecord()">+ Novo avaliado</button>
+        <button class="btn btn-petrol btn-sm" onclick="saveCurrent()">Salvar avaliação atual</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportJSON()">Exportar (.json)</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportCSV()">Exportar planilha (.csv)</button>
+        <label class="btn btn-ghost btn-sm" style="cursor:pointer;display:inline-block">Importar (.json)
+          <input type="file" accept="application/json,.json" style="display:none" onchange="importJSON(event)">
+        </label>
+        <button class="btn btn-ghost btn-sm hidden" id="btn-install" onclick="doInstall()">Instalar app</button>
+      </div>
+      <input class="search" id="search" type="text" placeholder="Buscar por nome…" oninput="renderRecords()">
+      <div id="rec-list"></div>
+    </section>
+  </div>
+
+  <!-- 01 ANAMNESE -->
+  <div class="panel" id="panel-anamnese">
+    <section class="card">
+      <h2>Identificação</h2>
+      <div class="grid g2" style="margin-bottom:11px">
+        <div><label for="nome">Nome</label><input id="nome" type="text" placeholder="—" oninput="onNome()"></div>
+        <div><label for="avaliador">Avaliador(a)</label><input id="avaliador" type="text" placeholder="—" oninput="touch()"></div>
+      </div>
+      <div class="grid g4">
+        <div><label for="nascimento">Nascimento</label><input id="nascimento" type="date" oninput="onBirth()"></div>
+        <div><label for="idade">Idade</label><input id="idade" type="number" min="0" max="120" placeholder="—" oninput="recompute()"></div>
+        <div><label for="sexo">Sexo</label><select id="sexo" onchange="onSexChange()"><option value="M">Masculino</option><option value="F">Feminino</option></select></div>
+        <div><label for="categoria">Categoria</label><select id="categoria" onchange="onCatChange()"><option value="idoso">Idoso</option><option value="adulto">Adulto (25–55)</option><option value="atleta">Atleta</option></select></div>
+        <div><label for="cref">CREF avaliador</label><input id="cref" type="text" placeholder="—" oninput="touch()"></div>
+        <div><label for="dataAval">Data avaliação</label><input id="dataAval" type="date" oninput="touch()"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Anamnese clínica</h2>
+      <p class="sub">Histórico e triagem de risco. Orienta a prescrição e sinaliza contraindicações.</p>
+      <div class="grid g2">
+        <div><label for="queixa">Queixa / motivo principal</label><textarea id="queixa" placeholder="—" oninput="touch()"></textarea></div>
+        <div><label for="objetivos">Objetivos</label><textarea id="objetivos" placeholder="—" oninput="touch()"></textarea></div>
+      </div>
+      <div class="divider"></div>
+      <label>Condições relatadas</label>
+      <div class="chips" id="doencas-chips" style="margin-bottom:13px"></div>
+      <div class="grid g2">
+        <div><label for="medicamentos">Medicamentos em uso</label><textarea id="medicamentos" placeholder="—" oninput="touch()"></textarea></div>
+        <div><label for="lesoes">Lesões / cirurgias / limitações osteomusculares</label><textarea id="lesoes" placeholder="—" oninput="touch()"></textarea></div>
+      </div>
+      <div class="grid g3" style="margin-top:11px">
+        <div><label for="tabagismo">Tabagismo</label><select id="tabagismo" onchange="touch()"><option value="">—</option><option>Nunca</option><option>Ex-tabagista</option><option>Atual</option></select></div>
+        <div><label for="alcool">Etilismo</label><select id="alcool" onchange="touch()"><option value="">—</option><option>Não</option><option>Social</option><option>Frequente</option></select></div>
+        <div><label for="nivelAF">Nível de atividade física</label><select id="nivelAF" onchange="touch()"><option value="">—</option><option>Sedentário</option><option>Insuficientemente ativo</option><option>Ativo</option><option>Muito ativo</option></select></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>PAR-Q <span class="tag">triagem de prontidão</span></h2>
+      <p class="sub">Qualquer resposta afirmativa recomenda avaliação médica antes do início do programa.</p>
+      <div id="parq-container"></div>
+      <div class="interp" id="parq-verdict" style="margin-top:14px"></div>
+    </section>
+  </div>
+
+  <!-- 02 ANTROPOMETRIA -->
+  <div class="panel" id="panel-antro">
+    <section class="card">
+      <h2>Medidas básicas</h2>
+      <div class="grid g4">
+        <div><label for="massa">Massa (kg)</label><input id="massa" type="number" step="0.1" min="0" placeholder="—" oninput="recompute()"></div>
+        <div><label for="estatura">Estatura (cm)</label><input id="estatura" type="number" step="0.1" min="0" placeholder="—" oninput="recompute()"></div>
+        <div><label for="cintura">Cintura (cm)</label><input id="cintura" type="number" step="0.1" min="0" placeholder="—" oninput="recompute()"></div>
+        <div><label for="quadril">Quadril (cm)</label><input id="quadril" type="number" step="0.1" min="0" placeholder="—" oninput="recompute()"></div>
+      </div>
+      <div id="antro-basic-results" style="margin-top:8px"></div>
+    </section>
+
+    <section class="card" id="antro-idoso-card">
+      <h2>Antropometria do idoso <span class="tag">rastreio</span></h2>
+      <p class="sub">Circunferência da panturrilha (massa muscular).</p>
+      <div class="grid g3">
+        <div><label for="panturrilha">Circ. panturrilha (cm)</label><input id="panturrilha" type="number" step="0.1" min="0" placeholder="—" oninput="recompute()"></div>
+      </div>
+      <div id="antro-idoso-results" style="margin-top:8px"></div>
+    </section>
+
+    <section class="card">
+      <h2>Composição corporal <span class="tag">dobras cutâneas</span></h2>
+      <p class="sub">Escolha o protocolo. As dobras solicitadas se ajustam automaticamente.</p>
+      <label>Protocolo</label>
+      <div class="chips" id="bf-protocols" style="margin-bottom:14px"></div>
+      <div class="grid g4" id="fold-grid"></div>
+      <p class="refs" id="fold-hint" style="margin-top:8px"></p>
+      <div id="bf-results" style="margin-top:8px"></div>
+    </section>
+  </div>
+
+  <!-- 03 NEUROMOTOR -->
+  <div class="panel" id="panel-neuro">
+    <section class="card">
+      <h2>Testes neuromotores <span class="tag">atletas</span></h2>
+      <p class="sub">Potência, agilidade, velocidade, força e flexibilidade. Deixe em branco os testes não aplicados.</p>
+      <div class="grid g3">
+        <div><label for="saltoV">Salto vertical (cm)</label><input id="saltoV" type="number" step="0.1" min="0" placeholder="—" oninput="recompute()"></div>
+        <div><label for="impH">Impulsão horizontal (cm)</label><input id="impH" type="number" step="1" min="0" placeholder="—" oninput="recompute()"></div>
+        <div><label for="wells">Sentar-e-alcançar / Wells (cm)</label><input id="wells" type="number" step="0.1" placeholder="—" oninput="recompute()"></div>
+        <div><label for="testeT">Agilidade — Teste T (s)</label><input id="testeT" type="number" step="0.01" min="0" placeholder="—" oninput="recompute()"></div>
+        <div><label for="sprint">Velocidade 20 m (s)</label><input id="sprint" type="number" step="0.01" min="0" placeholder="—" oninput="recompute()"></div>
+      </div>
+      <div class="divider"></div>
+      <label>Força — teste de carga (estimativa de 1RM por Brzycki)</label>
+      <div class="grid g3">
+        <div><label for="rmCarga">Carga levantada (kg)</label><input id="rmCarga" type="number" step="0.5" min="0" placeholder="—" oninput="recompute()"></div>
+        <div><label for="rmReps">Repetições máximas</label><input id="rmReps" type="number" step="1" min="1" max="15" placeholder="—" oninput="recompute()"></div>
+      </div>
+      <div id="neuro-results" style="margin-top:10px"></div>
+    </section>
+    <section class="card">
+      <p class="refs"><strong>Referências:</strong> Sayers SP et al. Potência do salto. <em>Med Sci Sports Exerc</em>, 1999. · Pauole K et al. Teste T de agilidade, 2000. · Brzycki M. Estimativa de 1RM, 1993.</p>
+    </section>
+  </div>
+
+  <!-- 04 FUNCIONAL -->
+  <div class="panel" id="panel-func">
+    <section class="card">
+      <h2>Avaliação funcional <span class="tag">idosos</span></h2>
+      <p class="sub">Selecione o protocolo desejado.</p>
+      <label>Protocolo</label>
+      <div class="chips" id="func-protocols" style="margin-bottom:6px"></div>
+    </section>
+
+    <div id="proto-ewgsop2">
+      <section class="card">
+        <h2>Rastreio de sarcopenia <span class="tag">EWGSOP2</span></h2>
+        <div class="grid g4">
+          <div><label for="grip">Preensão manual (kg)</label><input id="grip" type="number" step="0.1" min="0" placeholder="—" oninput="recompute()"></div>
+          <div><label for="gait">Marcha 4 m (m/s)</label><input id="gait" type="number" step="0.01" min="0" placeholder="—" oninput="recompute()"></div>
+          <div><label for="sts">Sentar-levantar 5× (s)</label><input id="sts" type="number" step="0.1" min="0" placeholder="—" oninput="recompute()"></div>
+          <div><label for="tug">TUG (s)</label><input id="tug" type="number" step="0.1" min="0" placeholder="—" oninput="recompute()"></div>
+        </div>
+      </section>
+      <section class="card">
+        <h2>SARC-F <span class="tag">questionário</span></h2>
+        <div id="sarc-container"></div>
+      </section>
+      <div class="interp"><h3>Leitura do instrumento</h3><div id="ewgsop2-metrics"></div></div>
+      <div class="interp"><h3>Síntese diagnóstica (EWGSOP2)</h3><p id="ewgsop2-synthesis">Preencha os testes de força para gerar a interpretação.</p></div>
+      <section class="card"><p class="refs"><strong>Referências:</strong> Cruz-Jentoft AJ et al. EWGSOP2. <em>Age Ageing</em>, 2019 — preensão &lt;27 kg (♂)/&lt;16 kg (♀); marcha ≤0,8 m/s; sentar-levantar 5× &gt;15 s. · Malmstrom & Morley. SARC-F, 2013. · TUG ≥13,5 s: risco de quedas.</p></section>
+    </div>
+
+    <div id="proto-sppb" class="hidden">
+      <section class="card">
+        <h2>SPPB <span class="tag">Short Physical Performance Battery</span></h2>
+        <p class="sub">Três domínios pontuados de 0 a 4 (total 0–12). Escore ≤ 6 indica limitação de mobilidade.</p>
+        <label>Equilíbrio — tempo mantido (máx. 10 s)</label>
+        <div class="grid g3" style="margin-bottom:6px">
+          <div><label for="bal_side">Pés juntos (s)</label><input id="bal_side" type="number" step="0.1" min="0" max="10" placeholder="—" oninput="recompute()"></div>
+          <div><label for="bal_semi">Semi-tandem (s)</label><input id="bal_semi" type="number" step="0.1" min="0" max="10" placeholder="—" oninput="recompute()"></div>
+          <div><label for="bal_tan">Tandem (s)</label><input id="bal_tan" type="number" step="0.1" min="0" max="10" placeholder="—" oninput="recompute()"></div>
+        </div>
+        <div class="grid g2">
+          <div><label for="sppb_gait">Marcha 4 m — tempo (s)</label><input id="sppb_gait" type="number" step="0.01" min="0" placeholder="—" oninput="recompute()"></div>
+          <div><label for="sppb_chair">Sentar-levantar 5× — tempo (s)</label><input id="sppb_chair" type="number" step="0.1" min="0" placeholder="—" oninput="recompute()"></div>
+        </div>
+      </section>
+      <div class="interp"><h3>Pontuação SPPB</h3><div id="sppb-metrics"></div></div>
+      <section class="card"><p class="refs"><strong>Referência:</strong> Guralnik JM et al. <em>J Gerontol</em>, 1994. Corte ≤ 6 pontos: mobilidade reduzida.</p></section>
+    </div>
+  </div>
+
+  <!-- 05 APTIDÃO -->
+  <div class="panel" id="panel-aptidao">
+    <section class="card">
+      <h2>Aptidão cardiorrespiratória <span class="tag">adulto 25–55</span></h2>
+      <p class="sub">Estimativa de VO₂máx. Selecione o protocolo aplicado.</p>
+      <label>Protocolo</label>
+      <div class="chips" id="vo2-protocols" style="margin-bottom:14px"></div>
+
+      <div id="vo2-cooper" class="vo2-inputs">
+        <div class="grid g2"><div><label for="cooperDist">Distância em 12 min (m)</label><input id="cooperDist" type="number" step="1" min="0" placeholder="—" oninput="recompute()"></div></div>
+      </div>
+      <div id="vo2-rockport" class="vo2-inputs hidden">
+        <div class="grid g3">
+          <div><label for="rockTime">Tempo 1 milha (min)</label><input id="rockTime" type="number" step="0.01" min="0" placeholder="—" oninput="recompute()"></div>
+          <div><label for="rockHR">FC final (bpm)</label><input id="rockHR" type="number" step="1" min="0" placeholder="—" oninput="recompute()"></div>
+        </div>
+        <p class="refs">Usa massa (Antropometria) e idade (Anamnese). Rockport 1 milha caminhando.</p>
+      </div>
+      <div id="vo2-step" class="vo2-inputs hidden">
+        <div class="grid g3"><div><label for="stepHR">FC recuperação (bpm)</label><input id="stepHR" type="number" step="1" min="0" placeholder="—" oninput="recompute()"></div></div>
+        <p class="refs">Queens College: banco 41 cm, 3 min (♂ 24 / ♀ 22 passos·min⁻¹). FC nos 15 s após, ×4.</p>
+      </div>
+      <div id="vo2-results" style="margin-top:10px"></div>
+    </section>
+
+    <section class="card">
+      <h2>Resistência muscular e flexibilidade <span class="tag">adulto</span></h2>
+      <div class="grid g3">
+        <div><label for="pushup">Flexão de braço (máx.)</label><input id="pushup" type="number" step="1" min="0" placeholder="—" oninput="recompute()"></div>
+        <div><label for="plank">Prancha isométrica (s)</label><input id="plank" type="number" step="1" min="0" placeholder="—" oninput="recompute()"></div>
+        <div><label for="wells2">Sentar-e-alcançar (cm)</label><input id="wells2" type="number" step="0.1" placeholder="—" oninput="recompute()"></div>
+      </div>
+      <div id="apt-musc-results" style="margin-top:10px"></div>
+    </section>
+
+    <section class="card"><p class="refs"><strong>Referências:</strong> Cooper KH. Teste de 12 min, 1968. · Kline GM et al. Rockport, 1987. · McArdle WD et al. Queens College Step Test, 1972. · Classificação de VO₂máx: referência ACSM/Cooper Institute.</p></section>
+  </div>
+
+  <!-- 06 RELATÓRIO -->
+  <div class="panel" id="panel-relatorio">
+    <section class="card">
+      <div id="report-body"></div>
+      <div class="sign-line">
+        Avaliador(a): ______________________________  ·  CREF: __________<br>
+        Assinatura: ______________________________
+      </div>
+    </section>
+    <div class="actions noprint">
+      <button class="btn btn-primary" onclick="window.print()">Imprimir / Salvar PDF</button>
+    </div>
+  </div>
+
+  <p class="disclaimer noprint">HYBRID Fit · Ferramenta de apoio à decisão para uso profissional. Não substitui julgamento clínico nem diagnóstico médico. Dados processados e armazenados apenas neste aparelho.</p>
+</div>
+
+<script src="js/db.js"></script>
+<script>
+/* ===== ESTADO ===== */
+const state = { tab:'banco', catFunc:'ewgsop2', bfProto:'jp3', vo2Proto:'cooper', dirty:false };
+let records = [];               // cache em memória, espelho do IndexedDB
+let currentId = null;
+
+/* ===== HELPERS ===== */
+const $ = id => document.getElementById(id);
+const num = id => { const el=$(id); if(!el) return null; const v=parseFloat(el.value); return isNaN(v)?null:v; };
+const val = id => { const el=$(id); return el?el.value:''; };
+const sex = () => val('sexo');
+const age = () => num('idade');
+const cat = () => val('categoria');
+function touch(){ state.dirty=true; }
+function onNome(){ touch(); updateWho(); }
+
+function ruler(name, value, unit, min, max, bands, verdictFn){
+  const has = value!==null && value!==undefined && !isNaN(value);
+  let pct = has ? (value-min)/(max-min)*100 : 0; pct=Math.max(0,Math.min(100,pct));
+  const segs = bands.map((b,i)=>{const f=i===0?min:bands[i-1].to;return `<div class="band" style="width:${(b.to-f)/(max-min)*100}%;background:${b.color}"></div>`;}).join('');
+  const labs = bands.map((b,i)=>{const f=i===0?min:bands[i-1].to;return `<span style="width:${(b.to-f)/(max-min)*100}%">${b.label}</span>`;}).join('');
+  const v = has?verdictFn(value):{cls:'v-none',txt:'Sem dado'};
+  const vt = has?`${(Math.round(value*100)/100)}<span class="unit"> ${unit}</span>`:`<span class="empty">— ${unit}</span>`;
+  return `<div class="metric"><div class="metric-head"><span class="metric-name">${name}</span><span class="metric-val">${vt}</span></div>
+    <div class="ruler"><div class="ruler-track">${segs}</div>${has?`<div class="needle" style="left:calc(${pct}% - 1px)"></div>`:''}<div class="band-labels">${labs}</div></div>
+    <span class="verdict ${v.cls}"><span class="dot"></span>${v.txt}</span></div>`;
+}
+
+/* ===== NAV ===== */
+const TAB_ORDER=['banco','anamnese','antro','neuro','func','aptidao','relatorio'];
+function setTab(t){
+  state.tab=t;
+  document.querySelectorAll('.tab').forEach((b,i)=>b.setAttribute('aria-selected', TAB_ORDER[i]===t));
+  TAB_ORDER.forEach(o=>$('panel-'+o).classList.toggle('active', o===t));
+  if(t==='relatorio') buildReport();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function onCatChange(){ applyCategory(); recompute(); touch(); }
+function applyCategory(){ $('antro-idoso-card').classList.toggle('hidden', cat()!=='idoso'); }
+function onSexChange(){ buildFolds(); recompute(); touch(); }
+function onBirth(){
+  const d=val('nascimento');
+  if(d){ const b=new Date(d), n=new Date(); let a=n.getFullYear()-b.getFullYear(); const m=n.getMonth()-b.getMonth(); if(m<0||(m===0&&n.getDate()<b.getDate()))a--; $('idade').value=a; }
+  recompute(); touch();
+}
+
+/* ===== ANAMNESE ===== */
+const doencasList=['HAS','Diabetes','Dislipidemia','Cardiopatia','DPOC/asma','Osteoartrose','Osteoporose','Obesidade','AVC prévio','Depressão/ansiedade'];
+function buildDoencas(){ $('doencas-chips').innerHTML=doencasList.map(d=>`<button class="chip" aria-pressed="false" data-d="${d}" onclick="toggleChip(this)">${d}</button>`).join(''); }
+function toggleChip(btn){ btn.setAttribute('aria-pressed', btn.getAttribute('aria-pressed')!=='true'); touch(); }
+
+const parqList=[
+  'Algum médico já disse que você possui problema cardíaco?',
+  'Sente dor no peito ao realizar atividade física?',
+  'No último mês, teve dor no peito em repouso?',
+  'Perde o equilíbrio por tontura ou já perdeu a consciência?',
+  'Tem problema ósseo/articular agravado por atividade física?',
+  'Toma medicamento para pressão arterial ou coração?',
+  'Conhece alguma outra razão para não praticar atividade física?'
+];
+const parqState={};
+function buildParq(){
+  $('parq-container').innerHTML=parqList.map((q,i)=>`<div class="qrow"><p>${i+1}. ${q}</p>
+    <div class="chips"><button class="chip" aria-pressed="false" data-p="${i}" data-v="sim" onclick="setParq(${i},'sim',this)">Sim</button>
+    <button class="chip" aria-pressed="false" data-p="${i}" data-v="nao" onclick="setParq(${i},'nao',this)">Não</button></div></div>`).join('');
+}
+function setParq(i,v,btn){ parqState[i]=v; btn.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false')); btn.setAttribute('aria-pressed','true'); recompute(); touch(); }
+function parqVerdict(){
+  const anySim=Object.values(parqState).some(v=>v==='sim');
+  if(Object.keys(parqState).length===0) return {h:'Triagem PAR-Q',t:'Responda os itens para gerar a recomendação.'};
+  if(anySim) return {h:'⚠ Encaminhamento recomendado',t:'Há ao menos uma resposta afirmativa. Recomenda-se avaliação médica antes de iniciar o programa.'};
+  return {h:'✓ Prontidão preservada',t:'Nenhuma resposta afirmativa. Prossiga com a avaliação e prescrição conforme os achados.'};
+}
+
+/* ===== SARC-F ===== */
+const sarcQ=[
+  {k:'a',q:'Força para levantar/carregar ~4,5 kg',o:['Nenhuma','Alguma','Muita/incapaz']},
+  {k:'b',q:'Caminhar por um cômodo',o:['Nenhuma','Alguma','Muita/apoio/incapaz']},
+  {k:'c',q:'Levantar-se de cadeira ou cama',o:['Nenhuma','Alguma','Muita/incapaz sem ajuda']},
+  {k:'d',q:'Subir 10 degraus',o:['Nenhuma','Alguma','Muita/incapaz']},
+  {k:'e',q:'Quedas no último ano',o:['Nenhuma','1 a 3','4 ou mais']}
+];
+const sarc={a:null,b:null,c:null,d:null,e:null};
+function buildSarc(){ $('sarc-container').innerHTML=sarcQ.map(it=>`<div class="qrow"><p>${it.q}</p><div class="chips">${it.o.map((o,i)=>`<button class="chip" aria-pressed="false" data-k="${it.k}" data-v="${i}" onclick="setSarc('${it.k}',${i},this)">${o} · ${i}</button>`).join('')}</div></div>`).join(''); }
+function setSarc(k,v,btn){ sarc[k]=v; btn.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false')); btn.setAttribute('aria-pressed','true'); recompute(); touch(); }
+function sarcScore(){ const v=Object.values(sarc); return v.some(x=>x===null)?null:v.reduce((a,b)=>a+b,0); }
+
+/* ===== COMPOSIÇÃO ===== */
+const bfProtocols={
+  jp3:{nome:'Jackson & Pollock (3)', sites:{M:['peitoral','abdominal','coxa'],F:['triceps','suprailiaca','coxa']}},
+  jp7:{nome:'Jackson & Pollock (7)', sites:{M:['peitoral','axilarmedia','triceps','subescapular','abdominal','suprailiaca','coxa'],F:['peitoral','axilarmedia','triceps','subescapular','abdominal','suprailiaca','coxa']}},
+  faulkner:{nome:'Faulkner (4)', sites:{M:['triceps','subescapular','suprailiaca','abdominal'],F:['triceps','subescapular','suprailiaca','abdominal']}}
+};
+const siteNames={peitoral:'Peitoral',abdominal:'Abdominal',coxa:'Coxa',triceps:'Tríceps',suprailiaca:'Suprailíaca',axilarmedia:'Axilar média',subescapular:'Subescapular'};
+function buildBfProtocols(){ $('bf-protocols').innerHTML=Object.keys(bfProtocols).map(k=>`<button class="chip" aria-pressed="${k===state.bfProto}" onclick="setBfProto('${k}')">${bfProtocols[k].nome}</button>`).join(''); }
+function setBfProto(k){ state.bfProto=k; buildBfProtocols(); buildFolds(); recompute(); touch(); }
+function currentSites(){ return bfProtocols[state.bfProto].sites[sex()]; }
+function buildFolds(){
+  const sites=currentSites();
+  $('fold-grid').innerHTML=sites.map(s=>`<div><label>${siteNames[s]} (mm)</label><input type="number" step="0.1" min="0" id="f_${s}" placeholder="—" oninput="recompute()"></div>`).join('');
+  const hints={jp3:'Densidade por Jackson & Pollock (3 dobras) + Siri (1961).',jp7:'Densidade por Jackson & Pollock (7 dobras) + Siri (1961).',faulkner:'%G = 5,783 + 0,153 × Σ(4 dobras). Faulkner (1968).'};
+  $('fold-hint').textContent=hints[state.bfProto];
+}
+function foldSum(){ const s=currentSites(); let sum=0; for(const x of s){const v=num('f_'+x); if(v===null) return null; sum+=v;} return sum; }
+function bodyFat(){
+  const S=foldSum(), A=age(); if(S===null) return null;
+  const s=sex();
+  if(state.bfProto==='faulkner') return 5.783+0.153*S;
+  if(A===null) return null;
+  let D;
+  if(state.bfProto==='jp3'){ D = s==='M' ? 1.10938-0.0008267*S+0.0000016*S*S-0.0002574*A : 1.0994921-0.0009929*S+0.0000023*S*S-0.0001392*A; }
+  else{ D = s==='M' ? 1.112-0.00043499*S+0.00000055*S*S-0.00028826*A : 1.097-0.00046971*S+0.00000056*S*S-0.00012828*A; }
+  return (495/D)-450;
+}
+function bfVerdict(bf){
+  const t = sex()==='M'?[5,13,17,24]:[13,20,24,31];
+  if(bf<t[0]) return {cls:'v-warn',txt:'Gordura essencial (muito baixa)'};
+  if(bf<=t[1]) return {cls:'v-good',txt:'Faixa de atletas'};
+  if(bf<=t[2]) return {cls:'v-good',txt:'Fitness / bom'};
+  if(bf<=t[3]) return {cls:'v-warn',txt:'Aceitável'};
+  return {cls:'v-alert',txt:'Elevada'};
+}
+
+/* ===== FUNCIONAL ===== */
+function buildFuncProtocols(){
+  const opts={ewgsop2:'Rastreio EWGSOP2 + SARC-F', sppb:'SPPB (0–12)'};
+  $('func-protocols').innerHTML=Object.keys(opts).map(k=>`<button class="chip" aria-pressed="${k===state.catFunc}" onclick="setFuncProto('${k}')">${opts[k]}</button>`).join('');
+}
+function setFuncProto(k){ state.catFunc=k; buildFuncProtocols(); $('proto-ewgsop2').classList.toggle('hidden',k!=='ewgsop2'); $('proto-sppb').classList.toggle('hidden',k!=='sppb'); recompute(); touch(); }
+function sppbScore(){
+  const side=num('bal_side'), semi=num('bal_semi'), tan=num('bal_tan'), g=num('sppb_gait'), c=num('sppb_chair');
+  let bal=null;
+  if(side!==null){ if(side<10) bal=0; else if(semi!==null){ if(semi<10) bal=1; else if(tan!==null){ bal = tan>=10?4 : tan>=3?3 : 2; } } }
+  let gs=null; if(g!==null){ gs = g<4.82?4 : g<=6.20?3 : g<=8.70?2 : 1; }
+  let cs=null; if(c!==null){ cs = c<=11.19?4 : c<=13.69?3 : c<=16.69?2 : c<=59.99?1 : 0; }
+  const total = (bal!==null&&gs!==null&&cs!==null) ? bal+gs+cs : null;
+  return {bal,gs,cs,total};
+}
+
+/* ===== APTIDÃO / VO2 ===== */
+function buildVo2Protocols(){
+  const o={cooper:'Cooper 12 min',rockport:'Rockport 1 milha',step:'Step test (Queens)'};
+  $('vo2-protocols').innerHTML=Object.keys(o).map(k=>`<button class="chip" aria-pressed="${k===state.vo2Proto}" onclick="setVo2Proto('${k}')">${o[k]}</button>`).join('');
+}
+function setVo2Proto(k){ state.vo2Proto=k; buildVo2Protocols(); ['cooper','rockport','step'].forEach(p=>$('vo2-'+p).classList.toggle('hidden',p!==k)); recompute(); touch(); }
+function vo2max(){
+  const p=state.vo2Proto, s=sex(), a=age(), massa=num('massa');
+  if(p==='cooper'){ const d=num('cooperDist'); return d===null?null:(d-504.9)/44.73; }
+  if(p==='rockport'){ const t=num('rockTime'), hr=num('rockHR'); if(t===null||hr===null||massa===null||a===null) return null;
+    const lb=massa*2.20462; return 132.853 - 0.0769*lb - 0.3877*a + 6.315*(s==='M'?1:0) - 3.2649*t - 0.1565*hr; }
+  if(p==='step'){ const hr=num('stepHR'); if(hr===null) return null; return s==='M' ? 111.33-0.42*hr : 65.81-0.1847*hr; }
+  return null;
+}
+function vo2Thresholds(){
+  const a=age()||35, s=sex(); let t;
+  if(s==='M'){ if(a<36)t=[35,43,52]; else if(a<46)t=[33,41,49]; else t=[31,38,46]; }
+  else{ if(a<36)t=[30,37,45]; else if(a<46)t=[28,34,42]; else t=[26,32,39]; }
+  return t;
+}
+function vo2Verdict(v){
+  const t=vo2Thresholds();
+  if(v<t[0]) return {cls:'v-alert',txt:'Fraca (referência)'};
+  if(v<t[1]) return {cls:'v-warn',txt:'Regular (referência)'};
+  if(v<t[2]) return {cls:'v-good',txt:'Boa (referência)'};
+  return {cls:'v-good',txt:'Excelente (referência)'};
+}
+
+/* ===== RECOMPUTE ===== */
+function recompute(){
+  const s=sex();
+  const pv=parqVerdict(); $('parq-verdict').innerHTML=`<h3>${pv.h}</h3><p>${pv.t}</p>`;
+
+  const massa=num('massa'), est=num('estatura'), cint=num('cintura'), quad=num('quadril');
+  let ab='';
+  const imc = (massa!==null&&est!==null&&est>0)? massa/Math.pow(est/100,2):null;
+  if(cat()==='idoso'){
+    ab += ruler('IMC (idoso · Lipschitz)', imc, 'kg/m²', 16, 38,
+      [{to:22,color:'#f0e2c2',label:'<22'},{to:27,color:'#cfe6d9',label:'22–27'},{to:38,color:'#e6c9c1',label:'>27'}],
+      v=> v<22?{cls:'v-warn',txt:'Baixo peso'} : v<=27?{cls:'v-good',txt:'Eutrofia'} : {cls:'v-alert',txt:'Sobrepeso'});
+  }else{
+    ab += ruler('IMC (OMS)', imc, 'kg/m²', 15, 40,
+      [{to:18.5,color:'#f0e2c2',label:'baixo'},{to:25,color:'#cfe6d9',label:'eutrofia'},{to:30,color:'#f0e2c2',label:'sobrep.'},{to:40,color:'#e6c9c1',label:'obes.'}],
+      v=> v<18.5?{cls:'v-warn',txt:'Baixo peso'} : v<25?{cls:'v-good',txt:'Eutrofia'} : v<30?{cls:'v-warn',txt:'Sobrepeso'} : {cls:'v-alert',txt:'Obesidade'});
+  }
+  const rcest = (cint!==null&&est!==null&&est>0)? cint/est : null;
+  ab += ruler('Razão cintura-estatura', rcest, '', 0.3, 0.7,
+    [{to:0.5,color:'#cfe6d9',label:'<0,5'},{to:0.7,color:'#e6c9c1',label:'≥0,5'}],
+    v=> v<0.5?{cls:'v-good',txt:'Baixo risco cardiometabólico'}:{cls:'v-alert',txt:'Risco cardiometabólico elevado'});
+  if(cint!==null){
+    const cc = s==='M'?[94,102]:[80,88];
+    ab += ruler('Circunferência de cintura', cint, 'cm', 60, 130,
+      [{to:cc[0],color:'#cfe6d9',label:'normal'},{to:cc[1],color:'#f0e2c2',label:'aument.'},{to:130,color:'#e6c9c1',label:'alto'}],
+      v=> v<cc[0]?{cls:'v-good',txt:'Normal'} : v<cc[1]?{cls:'v-warn',txt:'Risco aumentado'} : {cls:'v-alert',txt:'Risco muito elevado'});
+  }
+  if(cint!==null&&quad!==null&&quad>0){
+    const whr=cint/quad, wc=s==='M'?0.90:0.85;
+    ab += ruler('Relação cintura-quadril', whr, '', 0.6, 1.1,
+      [{to:wc,color:'#cfe6d9',label:'normal'},{to:1.1,color:'#e6c9c1',label:'risco'}],
+      v=> v<wc?{cls:'v-good',txt:'Baixo risco (OMS)'}:{cls:'v-alert',txt:'Risco cardiometabólico elevado (OMS)'});
+  }
+  $('antro-basic-results').innerHTML=ab;
+
+  if(cat()==='idoso'){
+    const pant=num('panturrilha');
+    $('antro-idoso-results').innerHTML = ruler('Circ. panturrilha', pant, 'cm', 24, 42,
+      [{to:31,color:'#e6c9c1',label:'<31'},{to:42,color:'#cfe6d9',label:'≥31'}],
+      v=> v<31?{cls:'v-alert',txt:'Sugestivo de baixa massa muscular'}:{cls:'v-good',txt:'Massa muscular preservada'});
+  }
+
+  const bf=bodyFat();
+  let cb='';
+  cb += ruler('Gordura corporal', bf, '%', 3, 42,
+    (s==='M'?[{to:5,color:'#f0e2c2',label:'essenc.'},{to:17,color:'#cfe6d9',label:'atl/fit'},{to:24,color:'#f0e2c2',label:'aceit.'},{to:42,color:'#e6c9c1',label:'elev.'}]
+            :[{to:13,color:'#f0e2c2',label:'essenc.'},{to:24,color:'#cfe6d9',label:'atl/fit'},{to:31,color:'#f0e2c2',label:'aceit.'},{to:42,color:'#e6c9c1',label:'elev.'}]),
+    v=> bfVerdict(v));
+  if(bf!==null&&massa!==null){
+    const fk=massa*bf/100, lk=massa-fk;
+    cb += `<div class="metric"><div class="metric-head"><span class="metric-name">Composição estimada</span><span class="metric-val">${Math.round(fk*10)/10} kg gordura · ${Math.round(lk*10)/10} kg magra</span></div></div>`;
+  }
+  $('bf-results').innerHTML=cb;
+
+  /* Neuromotor */
+  let nm='';
+  const sv=num('saltoV');
+  if(sv!==null&&massa!==null){
+    const pw=60.7*sv+45.3*massa-2055;
+    nm += ruler('Potência do salto (Sayers)', pw, 'W', 1500, 6000,
+      [{to:3000,color:'#f0e2c2',label:'baixa'},{to:4500,color:'#cfe6d9',label:'boa'},{to:6000,color:'#cfe6d9',label:'alta'}],
+      v=> v<3000?{cls:'v-warn',txt:'Potência baixa'} : {cls:'v-good',txt:'Potência adequada'});
+    nm += `<div class="metric"><div class="metric-head"><span class="metric-name">Altura do salto</span><span class="metric-val">${sv} cm · ${Math.round(pw/massa*10)/10} W/kg</span></div></div>`;
+  }else if(sv!==null){
+    nm += `<div class="metric"><div class="metric-head"><span class="metric-name">Salto vertical</span><span class="metric-val">${sv} cm <span class="unit">(informe a massa)</span></span></div></div>`;
+  }
+  const ih=num('impH');
+  if(ih!==null) nm += ruler('Impulsão horizontal', ih, 'cm', 120, 300,
+    [{to:180,color:'#f0e2c2',label:'baixa'},{to:240,color:'#cfe6d9',label:'média'},{to:300,color:'#cfe6d9',label:'boa'}],
+    v=> v<180?{cls:'v-warn',txt:'Abaixo do esperado'}:{cls:'v-good',txt:'Adequada'});
+  const w=num('wells');
+  if(w!==null) nm += ruler('Flexibilidade (Wells)', w, 'cm', 0, 45,
+    [{to:20,color:'#f0e2c2',label:'baixa'},{to:30,color:'#cfe6d9',label:'média'},{to:45,color:'#cfe6d9',label:'boa'}],
+    v=> v<20?{cls:'v-warn',txt:'Reduzida (referência)'}:{cls:'v-good',txt:'Adequada (referência)'});
+  const tt=num('testeT');
+  if(tt!==null){
+    const b = s==='M'?[9.5,10.5,11.5]:[10.5,11.5,12.5];
+    nm += ruler('Agilidade — Teste T', tt, 's', 8, 14,
+      [{to:b[0],color:'#cfe6d9',label:'exc.'},{to:b[1],color:'#cfe6d9',label:'bom'},{to:b[2],color:'#f0e2c2',label:'médio'},{to:14,color:'#e6c9c1',label:'fraco'}],
+      v=> v<b[0]?{cls:'v-good',txt:'Excelente'} : v<b[1]?{cls:'v-good',txt:'Bom'} : v<b[2]?{cls:'v-warn',txt:'Médio'} : {cls:'v-alert',txt:'Fraco'});
+  }
+  const sp=num('sprint');
+  if(sp!==null&&sp>0) nm += `<div class="metric"><div class="metric-head"><span class="metric-name">Velocidade 20 m</span><span class="metric-val">${sp} s · ${Math.round(20/sp*100)/100} m/s</span></div></div>`;
+  const rc=num('rmCarga'), rr=num('rmReps');
+  if(rc!==null&&rr!==null&&rr>=1){
+    const rm=rc/(1.0278-0.0278*rr);
+    nm += `<div class="metric"><div class="metric-head"><span class="metric-name">1RM estimado (Brzycki)</span><span class="metric-val">${Math.round(rm*10)/10} kg${massa?` · ${Math.round(rm/massa*100)/100}× massa`:''}</span></div></div>`;
+  }
+  $('neuro-results').innerHTML = nm || '<p class="sub">Preencha ao menos um teste para gerar a leitura.</p>';
+
+  /* Funcional EWGSOP2 */
+  const grip=num('grip'), gait=num('gait'), sts=num('sts'), tug=num('tug');
+  const gc = s==='M'?27:16;
+  let fm='';
+  fm += ruler('Preensão manual', grip, 'kg', 0, 60,
+    [{to:gc,color:'#e6c9c1',label:'baixa'},{to:60,color:'#cfe6d9',label:'normal'}],
+    v=> v<gc?{cls:'v-alert',txt:'Força baixa (EWGSOP2)'}:{cls:'v-good',txt:'Força preservada'});
+  fm += ruler('Velocidade de marcha', gait, 'm/s', 0, 1.6,
+    [{to:0.8,color:'#e6c9c1',label:'≤0,8'},{to:1.0,color:'#f0e2c2',label:'limítr.'},{to:1.6,color:'#cfe6d9',label:'≥1,0'}],
+    v=> v<=0.8?{cls:'v-alert',txt:'Desempenho baixo'} : v<1.0?{cls:'v-warn',txt:'Limítrofe'} : {cls:'v-good',txt:'Preservada'});
+  fm += ruler('Sentar-levantar 5×', sts, 's', 0, 30,
+    [{to:15,color:'#cfe6d9',label:'≤15'},{to:30,color:'#e6c9c1',label:'>15'}],
+    v=> v>15?{cls:'v-alert',txt:'Desempenho baixo'}:{cls:'v-good',txt:'Normal'});
+  fm += ruler('TUG', tug, 's', 0, 30,
+    [{to:10,color:'#cfe6d9',label:'<10'},{to:13.5,color:'#f0e2c2',label:'10–13,5'},{to:30,color:'#e6c9c1',label:'≥13,5'}],
+    v=> v<10?{cls:'v-good',txt:'Baixo risco de quedas'} : v<13.5?{cls:'v-warn',txt:'Monitorar'} : {cls:'v-alert',txt:'Risco elevado'});
+  const sc=sarcScore();
+  fm += ruler('SARC-F', sc, 'pts', 0, 10,
+    [{to:4,color:'#cfe6d9',label:'0–3'},{to:10,color:'#e6c9c1',label:'≥4'}],
+    v=> v>=4?{cls:'v-alert',txt:'Sugestivo de sarcopenia'}:{cls:'v-good',txt:'Sem indício'});
+  $('ewgsop2-metrics').innerHTML=fm;
+
+  const lowStr=(grip!==null&&grip<gc)||(sts!==null&&sts>15);
+  const lowPerf=(gait!==null&&gait<=0.8);
+  let syn;
+  if(grip===null&&sts===null) syn='Preencha ao menos um teste de força (preensão ou sentar-levantar) para aplicar o algoritmo.';
+  else if(!lowStr) syn='Força muscular dentro da normalidade — sem indício de sarcopenia pelos testes de força.'+(sc!==null&&sc>=4?' Contudo, SARC-F ≥ 4 justifica reavaliação.':'');
+  else if(lowStr&&lowPerf) syn='Força baixa + desempenho baixo (marcha ≤ 0,8 m/s): quadro compatível com <strong>sarcopenia grave</strong> (EWGSOP2). Confirmar por massa muscular (DXA/BIA); priorizar treinamento resistido progressivo e suporte nutricional.';
+  else syn='Força muscular baixa: <strong>sarcopenia provável</strong> (EWGSOP2). Confirmar por massa muscular (DXA/BIA) e iniciar treinamento resistido.';
+  $('ewgsop2-synthesis').innerHTML=syn;
+
+  /* SPPB */
+  const sp2=sppbScore();
+  const mk=(lbl,v)=> `<div class="metric"><div class="metric-head"><span class="metric-name">${lbl}</span><span class="metric-val">${v===null?'<span class="empty">—</span>':v+' / 4'}</span></div></div>`;
+  let sh = mk('Equilíbrio',sp2.bal)+mk('Marcha',sp2.gs)+mk('Sentar-levantar',sp2.cs);
+  sh += ruler('SPPB — total', sp2.total, 'pts', 0, 12,
+    [{to:6,color:'#e6c9c1',label:'≤6'},{to:9,color:'#f0e2c2',label:'7–9'},{to:12,color:'#cfe6d9',label:'10–12'}],
+    v=> v<=6?{cls:'v-alert',txt:'Mobilidade reduzida'} : v<=9?{cls:'v-warn',txt:'Intermediário'} : {cls:'v-good',txt:'Bom desempenho'});
+  $('sppb-metrics').innerHTML=sh;
+
+  /* Aptidão / VO2 */
+  const vo2=vo2max(); const t=vo2Thresholds();
+  let vh = ruler('VO₂máx estimado', vo2, 'ml/kg/min', 15, 60,
+    [{to:t[0],color:'#e6c9c1',label:'fraca'},{to:t[1],color:'#f0e2c2',label:'regular'},{to:t[2],color:'#cfe6d9',label:'boa'},{to:60,color:'#cfe6d9',label:'exc.'}],
+    v=> vo2Verdict(v));
+  if(vo2!==null) vh += `<div class="metric"><div class="metric-head"><span class="metric-name">Equivalente metabólico</span><span class="metric-val">${Math.round(vo2/3.5*10)/10} MET</span></div></div>`;
+  $('vo2-results').innerHTML=vh;
+
+  let am='';
+  const pu=num('pushup');
+  if(pu!==null) am += ruler('Flexão de braço', pu, 'rep', 0, 60,
+    [{to:15,color:'#e6c9c1',label:'baixa'},{to:30,color:'#f0e2c2',label:'média'},{to:60,color:'#cfe6d9',label:'boa'}],
+    v=> v<15?{cls:'v-warn',txt:'Baixa (referência)'} : v<30?{cls:'v-good',txt:'Média (referência)'} : {cls:'v-good',txt:'Boa (referência)'});
+  const pl=num('plank');
+  if(pl!==null) am += ruler('Prancha isométrica', pl, 's', 0, 180,
+    [{to:30,color:'#e6c9c1',label:'<30'},{to:60,color:'#f0e2c2',label:'30–60'},{to:180,color:'#cfe6d9',label:'>60'}],
+    v=> v<30?{cls:'v-warn',txt:'Baixa (referência)'} : v<60?{cls:'v-good',txt:'Adequada (referência)'} : {cls:'v-good',txt:'Boa (referência)'});
+  const w2=num('wells2');
+  if(w2!==null) am += ruler('Flexibilidade (sentar-e-alcançar)', w2, 'cm', 0, 45,
+    [{to:20,color:'#f0e2c2',label:'baixa'},{to:30,color:'#cfe6d9',label:'média'},{to:45,color:'#cfe6d9',label:'boa'}],
+    v=> v<20?{cls:'v-warn',txt:'Reduzida (referência)'}:{cls:'v-good',txt:'Adequada (referência)'});
+  $('apt-musc-results').innerHTML = am || '<p class="sub">Preencha ao menos um teste para gerar a leitura.</p>';
+
+  updateWho();
+}
+
+function updateWho(){
+  const n=val('nome')||'Sem nome', a=age()?`${age()} anos`:'', c=cat();
+  $('who-header').innerHTML=`<b>${n}</b><br>${[a,c].filter(Boolean).join(' · ')}`;
+}
+
+/* ===== MODELO / BANCO (IndexedDB) ===== */
+const IDENT=['nome','avaliador','nascimento','idade','sexo','categoria','cref','dataAval'];
+const ANAM=['queixa','objetivos','medicamentos','lesoes','tabagismo','alcool','nivelAF'];
+const ANTRO=['massa','estatura','cintura','quadril','panturrilha'];
+const NEURO=['saltoV','impH','wells','testeT','sprint','rmCarga','rmReps'];
+const FUNC=['grip','gait','sts','tug','bal_side','bal_semi','bal_tan','sppb_gait','sppb_chair'];
+const APT=['cooperDist','rockTime','rockHR','stepHR','pushup','plank','wells2'];
+
+function collectRecord(){
+  const r={ id:currentId||('r'+Date.now()+Math.floor(Math.random()*1000)), atualizadoEm:new Date().toISOString() };
+  const grab=arr=>{const o={};arr.forEach(k=>o[k]=val(k));return o;};
+  r.ident=grab(IDENT); r.anam=grab(ANAM); r.antro=grab(ANTRO); r.neuro=grab(NEURO); r.func=grab(FUNC); r.apt=grab(APT);
+  r.doencas=[...document.querySelectorAll('#doencas-chips .chip[aria-pressed=true]')].map(b=>b.dataset.d);
+  r.parq={...parqState}; r.sarc={...sarc};
+  r.bfProto=state.bfProto; r.catFunc=state.catFunc; r.vo2Proto=state.vo2Proto;
+  const folds={}; document.querySelectorAll('#fold-grid input').forEach(i=>folds[i.id]=i.value); r.folds=folds;
+  return r;
+}
+function applyRecord(r){
+  const set=(arr,o)=>arr.forEach(k=>{ if($(k)) $(k).value=(o&&o[k]!==undefined)?o[k]:''; });
+  set(IDENT,r.ident); set(ANAM,r.anam); set(ANTRO,r.antro); set(NEURO,r.neuro); set(APT,r.apt);
+  applyCategory();
+  state.bfProto=r.bfProto||'jp3'; buildBfProtocols(); buildFolds();
+  if(r.folds) Object.keys(r.folds).forEach(k=>{ if($(k)) $(k).value=r.folds[k]; });
+  set(FUNC,r.func);
+  buildDoencas();
+  (r.doencas||[]).forEach(d=>{const b=document.querySelector(`#doencas-chips .chip[data-d="${d}"]`); if(b)b.setAttribute('aria-pressed','true');});
+  Object.keys(parqState).forEach(k=>delete parqState[k]); buildParq();
+  if(r.parq) Object.keys(r.parq).forEach(i=>{ parqState[i]=r.parq[i]; const b=document.querySelector(`#parq-container .chip[data-p="${i}"][data-v="${r.parq[i]}"]`); if(b)b.setAttribute('aria-pressed','true'); });
+  buildSarc(); Object.keys(sarc).forEach(k=>sarc[k]=null);
+  if(r.sarc) Object.keys(r.sarc).forEach(k=>{ if(r.sarc[k]!==null&&r.sarc[k]!==undefined){ sarc[k]=r.sarc[k]; const b=document.querySelector(`#sarc-container .chip[data-k="${k}"][data-v="${r.sarc[k]}"]`); if(b)b.setAttribute('aria-pressed','true'); } });
+  state.catFunc=r.catFunc||'ewgsop2'; setFuncProto(state.catFunc);
+  state.vo2Proto=r.vo2Proto||'cooper'; setVo2Proto(state.vo2Proto);
+  currentId=r.id; state.dirty=false; recompute();
+}
+function newRecord(){
+  currentId=null;
+  IDENT.concat(ANAM,ANTRO,NEURO,FUNC,APT).forEach(k=>{if($(k))$(k).value='';});
+  $('sexo').value='M'; $('categoria').value='idoso'; $('dataAval').valueAsDate=new Date();
+  Object.keys(sarc).forEach(k=>sarc[k]=null); Object.keys(parqState).forEach(k=>delete parqState[k]);
+  state.bfProto='jp3'; state.catFunc='ewgsop2'; state.vo2Proto='cooper';
+  buildDoencas(); buildParq(); buildSarc(); buildBfProtocols(); buildFolds();
+  setFuncProto('ewgsop2'); setVo2Proto('cooper'); applyCategory();
+  state.dirty=false; recompute(); setTab('anamnese');
+}
+async function saveCurrent(){
+  if(!val('nome').trim()){ alert('Informe o nome do avaliado antes de salvar.'); setTab('anamnese'); return; }
+  const r=collectRecord();
+  try{ await HFDB.put(r); currentId=r.id; state.dirty=false; records=await HFDB.getAll();
+    flash(HFDB.mode()==='indexeddb'?'Avaliação salva no banco local.':'Salva nesta sessão. Exporte para backup.');
+  }catch(e){ alert('Falha ao salvar: '+e); }
+}
+function loadRecord(id){ const r=records.find(x=>x.id===id); if(r){ applyRecord(JSON.parse(JSON.stringify(r))); renderRecords(); setTab('anamnese'); } }
+async function delRecord(id,ev){ ev.stopPropagation(); if(!confirm('Excluir este avaliado do banco?')) return;
+  try{ await HFDB.remove(id); if(currentId===id)currentId=null; records=await HFDB.getAll(); renderRecords(); }catch(e){ alert('Falha ao excluir: '+e); } }
+function renderRecords(){
+  const q=(val('search')||'').toLowerCase();
+  const list=records.filter(r=>((r.ident&&r.ident.nome)||'').toLowerCase().includes(q));
+  const modeTxt = HFDB.mode()==='indexeddb' ? '· banco local (IndexedDB) ativo' : '· sessão atual — exporte para guardar';
+  $('db-status').innerHTML=`<b>${records.length}</b> avaliado(s) ${modeTxt}`;
+  if(list.length===0){ $('rec-list').innerHTML='<div class="empty-state">Nenhum avaliado. Toque em <b>+ Novo avaliado</b> para começar.</div>'; return; }
+  $('rec-list').innerHTML=list.map(r=>{
+    const c=(r.ident&&r.ident.categoria)||'adulto'; const dt=r.atualizadoEm?new Date(r.atualizadoEm).toLocaleDateString('pt-BR'):'';
+    const nm=(r.ident&&r.ident.nome)||'Sem nome';
+    const meta=[(r.ident&&r.ident.idade)?r.ident.idade+'a':'', r.ident&&r.ident.sexo, dt].filter(Boolean).join(' · ');
+    return `<div class="rec ${currentId===r.id?'active':''}" onclick="loadRecord('${r.id}')">
+      <div class="rec-main"><div class="rec-name">${nm}</div><div class="rec-meta">${meta}</div></div>
+      <div class="rec-actions"><span class="rec-cat ${c}">${c}</span><button class="icon-btn" onclick="delRecord('${r.id}',event)">excluir</button></div></div>`;
+  }).join('');
+}
+function flash(msg){ $('db-status').innerHTML=`<b style="color:var(--good)">✓ ${msg}</b>`; setTimeout(renderRecords,2600); }
+
+async function exportJSON(){
+  if(state.dirty && val('nome').trim() && confirm('Há alterações não salvas. Salvar antes de exportar?')) await saveCurrent();
+  download(new Blob([JSON.stringify(records,null,2)],{type:'application/json'}),`hybridfit-backup-${new Date().toISOString().slice(0,10)}.json`);
+}
+function exportCSV(){
+  const cols=['nome','idade','sexo','categoria','dataAval','massa','estatura','cintura','panturrilha','grip','gait','tug'];
+  let csv=cols.join(';')+'\n';
+  records.forEach(r=>{ const o={...(r.ident||{}),...(r.antro||{}),...(r.func||{})}; csv+=cols.map(c=>(o[c]==null?'':(''+o[c]).replace(/;/g,','))).join(';')+'\n'; });
+  download(new Blob(['\uFEFF'+csv],{type:'text/csv'}),`hybridfit-backup-${new Date().toISOString().slice(0,10)}.csv`);
+}
+function download(blob,name){ const u=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=u; a.download=name; a.click(); URL.revokeObjectURL(u); }
+function importJSON(ev){
+  const f=ev.target.files[0]; if(!f) return;
+  const rd=new FileReader();
+  rd.onload=async e=>{ try{ const data=JSON.parse(e.target.result); if(!Array.isArray(data)) throw 0;
+    const add=await HFDB.bulkAddNew(data); records=await HFDB.getAll(); flash(`${add} registro(s) importado(s).`);
+  }catch(err){ alert('Arquivo inválido. Use um .json exportado pelo HYBRID Fit.'); } ev.target.value=''; };
+  rd.readAsText(f);
+}
+
+/* ===== RELATÓRIO ===== */
+function row(k,v){ return v?`<div class="rep-row"><span class="k">${k}</span><span class="v">${v}</span></div>`:''; }
+function buildReport(){
+  recompute();
+  const g=id=>val(id), n=id=>num(id);
+  let h=`<div class="rep-block"><h4>Identificação</h4>
+    ${row('Nome',g('nome'))}${row('Idade',g('idade')?g('idade')+' anos':'')}${row('Sexo',g('sexo')==='M'?'Masculino':'Feminino')}
+    ${row('Categoria',g('categoria'))}${row('Data',g('dataAval'))}${row('Avaliador',g('avaliador'))}</div>`;
+  const doen=[...document.querySelectorAll('#doencas-chips .chip[aria-pressed=true]')].map(b=>b.dataset.d).join(', ');
+  const pv=parqVerdict();
+  h+=`<div class="rep-block"><h4>Anamnese</h4>
+    ${row('Queixa',g('queixa'))}${row('Objetivos',g('objetivos'))}${row('Condições',doen)}
+    ${row('Medicamentos',g('medicamentos'))}${row('Nível de AF',g('nivelAF'))}${row('PAR-Q',pv.h.replace(/[⚠✓]\s?/,''))}</div>`;
+  const massa=n('massa'),est=n('estatura');
+  const imc=(massa&&est)?Math.round(massa/Math.pow(est/100,2)*10)/10:null;
+  const bf=bodyFat();
+  h+=`<div class="rep-block"><h4>Antropometria e composição</h4>
+    ${row('Massa',massa?massa+' kg':'')}${row('Estatura',est?est+' cm':'')}${row('IMC',imc?imc+' kg/m²':'')}
+    ${row('Cintura',n('cintura')?n('cintura')+' cm':'')}${cat()==='idoso'?row('Circ. panturrilha',n('panturrilha')?n('panturrilha')+' cm':''):''}
+    ${row('% Gordura ('+bfProtocols[state.bfProto].nome+')',bf!==null?Math.round(bf*10)/10+' %':'')}</div>`;
+  let nmrows='';
+  const sv=n('saltoV');
+  if(sv&&massa) nmrows+=row('Potência salto',Math.round(60.7*sv+45.3*massa-2055)+' W');
+  if(n('testeT')) nmrows+=row('Teste T',n('testeT')+' s');
+  if(n('sprint')) nmrows+=row('Velocidade 20 m',n('sprint')+' s');
+  if(n('rmCarga')&&n('rmReps')) nmrows+=row('1RM estimado',Math.round(n('rmCarga')/(1.0278-0.0278*n('rmReps'))*10)/10+' kg');
+  if(n('wells')) nmrows+=row('Flexibilidade',n('wells')+' cm');
+  if(nmrows) h+=`<div class="rep-block"><h4>Neuromotor</h4>${nmrows}</div>`;
+  let arows='';
+  const vo2=vo2max();
+  if(vo2!==null) arows+=row('VO₂máx',Math.round(vo2*10)/10+' ml/kg/min');
+  if(n('pushup')) arows+=row('Flexão de braço',n('pushup')+' rep');
+  if(n('plank')) arows+=row('Prancha',n('plank')+' s');
+  if(arows) h+=`<div class="rep-block"><h4>Aptidão</h4>${arows}</div>`;
+  let frows='';
+  if(state.catFunc==='ewgsop2'){
+    if(n('grip')) frows+=row('Preensão',n('grip')+' kg');
+    if(n('gait')) frows+=row('Marcha',n('gait')+' m/s');
+    if(n('sts')) frows+=row('Sentar-levantar 5×',n('sts')+' s');
+    if(n('tug')) frows+=row('TUG',n('tug')+' s');
+    const scc=sarcScore(); if(scc!==null) frows+=row('SARC-F',scc+' pts');
+    frows+=`<div class="rep-row"><span class="k">Síntese EWGSOP2</span><span class="v" style="max-width:62%">${$('ewgsop2-synthesis').textContent}</span></div>`;
+  }else{
+    const spp=sppbScore(); if(spp.total!==null) frows+=row('SPPB total',spp.total+' / 12');
+  }
+  if(frows) h+=`<div class="rep-block"><h4>Avaliação funcional</h4>${frows}</div>`;
+  $('report-body').innerHTML=h;
+}
+
+/* ===== PWA: instalação + service worker ===== */
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); deferredPrompt=e; $('btn-install').classList.remove('hidden'); });
+function doInstall(){ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt=null; $('btn-install').classList.add('hidden'); } }
+if('serviceWorker' in navigator){ window.addEventListener('load',()=>{ navigator.serviceWorker.register('service-worker.js').catch(()=>{}); }); }
+
+/* ===== INIT ===== */
+(async function init(){
+  buildDoencas(); buildParq(); buildSarc(); buildBfProtocols(); buildFolds(); buildFuncProtocols(); buildVo2Protocols();
+  $('dataAval').valueAsDate=new Date();
+  applyCategory(); recompute();
+  await HFDB.open();
+  try{ records=await HFDB.getAll(); }catch(e){ records=[]; }
+  renderRecords();
+})();
+</script>
+</body>
+</html>
