@@ -29,22 +29,23 @@
 
   header{background:var(--petrol-deep);color:#eef2f0;padding:calc(18px + env(safe-area-inset-top)) 18px 18px;margin-bottom:16px;border-bottom:3px solid var(--amber)}
   .head-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
-  .brand{display:flex;align-items:center;gap:12px}
+  .brand{display:flex;align-items:center;gap:12px;cursor:pointer}
+  .brand:active{opacity:.75}
   .brand-logo{width:42px;height:42px;border-radius:11px;flex-shrink:0}
   .brand-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#7fb3ba;margin-bottom:3px}
   h1{font-family:var(--display);font-weight:800;font-size:clamp(18px,4vw,25px);line-height:1.02;letter-spacing:-.01em}
   .who{font-family:var(--mono);font-size:11px;color:#9fc0c4;text-align:right;line-height:1.5}
   .who b{color:#eef2f0;font-weight:600}
 
-  .tabs{display:flex;gap:5px;margin-bottom:18px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
-  .tab{flex:0 0 auto;font-family:var(--display);font-weight:700;font-size:13px;padding:10px 15px;border-radius:9px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer;white-space:nowrap}
-  .tab[aria-selected=true]{background:var(--petrol);color:#fff;border-color:var(--petrol)}
-  .tab .num{font-family:var(--mono);font-size:10px;opacity:.7;margin-right:5px}
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .menu-card{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;font-family:var(--sans);padding:14px 15px;border:1px solid var(--line);border-radius:11px;background:#fcfbf7;cursor:pointer}
+  .menu-card:active{background:#f0f6f5;border-color:var(--petrol)}
+  .menu-card-num{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--amber);font-weight:600}
+  .menu-card-title{font-family:var(--display);font-weight:700;font-size:15px;color:var(--ink)}
+  .menu-card-sub{font-size:11.5px;color:var(--muted);line-height:1.35}
 
   .panel-nav{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);z-index:20;box-shadow:0 -2px 10px rgba(0,0,0,.06)}
-  .panel-nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 18px calc(10px + env(safe-area-inset-bottom))}
-  .panel-nav-pos{font-family:var(--mono);font-size:10.5px;color:var(--muted);text-align:center;flex:1}
-  .btn:disabled{opacity:.35;cursor:not-allowed}
+  .panel-nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:10px 18px calc(10px + env(safe-area-inset-bottom))}
 
   .panel{display:none}.panel.active{display:block}
   section.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px}
@@ -133,7 +134,7 @@
     body{background:#fff}
     header{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 10px;margin-bottom:14px}
     .brand-eyebrow{color:#555}.who{color:#333;display:block}.who b{color:#000}h1{color:#000}
-    .tabs,.actions,.noprint,.db-status,.search,.panel-nav{display:none!important}
+    .actions,.noprint,.db-status,.search,.panel-nav{display:none!important}
     .panel{display:none!important}
     #panel-relatorio{display:block!important}
     .card,.interp{border:1px solid #999!important;background:#fff!important;color:#000!important;box-shadow:none!important}
@@ -144,7 +145,7 @@
 <body>
 <header>
   <div class="head-inner">
-    <div class="brand">
+    <div class="brand" role="button" tabindex="0" aria-label="Abrir menu de seções" onclick="setTab('menu')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setTab('menu');}">
       <img class="brand-logo" src="assets/icon-192.png" alt="HYBRID Fit">
       <div>
         <div class="brand-eyebrow">HYBRID Fit · avaliação</div>
@@ -156,16 +157,6 @@
 </header>
 
 <div class="wrap">
-
-  <div class="tabs" role="tablist" id="tabbar">
-    <button class="tab" role="tab" aria-selected="true" onclick="setTab('banco')"><span class="num">00</span>Banco</button>
-    <button class="tab" role="tab" aria-selected="false" onclick="setTab('anamnese')"><span class="num">01</span>Anamnese</button>
-    <button class="tab" role="tab" aria-selected="false" onclick="setTab('antro')"><span class="num">02</span>Antropometria</button>
-    <button class="tab" role="tab" aria-selected="false" onclick="setTab('neuro')"><span class="num">03</span>Neuromotor</button>
-    <button class="tab" role="tab" aria-selected="false" onclick="setTab('func')"><span class="num">04</span>Funcional</button>
-    <button class="tab" role="tab" aria-selected="false" onclick="setTab('aptidao')"><span class="num">05</span>Aptidão</button>
-    <button class="tab" role="tab" aria-selected="false" onclick="setTab('relatorio')"><span class="num">06</span>Relatório</button>
-  </div>
 
   <!-- 00 BANCO -->
   <div class="panel active" id="panel-banco">
@@ -185,6 +176,22 @@
       </div>
       <input class="search" id="search" type="text" placeholder="Buscar por nome…" oninput="renderRecords()">
       <div id="rec-list"></div>
+    </section>
+  </div>
+
+  <!-- 01 MENU -->
+  <div class="panel" id="panel-menu">
+    <section class="card">
+      <h2>Seções da avaliação</h2>
+      <p class="sub">Toque numa seção para ir direto a ela. Toque no cabeçalho a qualquer momento para voltar aqui.</p>
+      <div class="menu-grid">
+        <button class="menu-card" onclick="setTab('anamnese')"><span class="menu-card-num">01</span><span class="menu-card-title">Anamnese</span><span class="menu-card-sub">Identificação, histórico clínico, PAR-Q</span></button>
+        <button class="menu-card" onclick="setTab('antro')"><span class="menu-card-num">02</span><span class="menu-card-title">Antropometria</span><span class="menu-card-sub">Medidas, dobras cutâneas, composição corporal</span></button>
+        <button class="menu-card" onclick="setTab('neuro')"><span class="menu-card-num">03</span><span class="menu-card-title">Neuromotor</span><span class="menu-card-sub">Potência, agilidade, força, flexibilidade</span></button>
+        <button class="menu-card" onclick="setTab('func')"><span class="menu-card-num">04</span><span class="menu-card-title">Funcional</span><span class="menu-card-sub">EWGSOP2, SARC-F, SPPB</span></button>
+        <button class="menu-card" onclick="setTab('aptidao')"><span class="menu-card-num">05</span><span class="menu-card-title">Aptidão</span><span class="menu-card-sub">VO₂máx, resistência muscular</span></button>
+        <button class="menu-card" onclick="setTab('relatorio')"><span class="menu-card-num">06</span><span class="menu-card-title">Relatório</span><span class="menu-card-sub">Síntese para impressão / PDF</span></button>
+      </div>
     </section>
   </div>
 
@@ -395,8 +402,6 @@
 
   <div class="panel-nav noprint" id="panel-nav">
     <div class="panel-nav-inner">
-      <button class="btn btn-ghost btn-sm" id="btn-prev" onclick="prevTab()">← Anterior</button>
-      <span class="panel-nav-pos" id="panel-nav-pos"></span>
       <button class="btn btn-petrol btn-sm" id="btn-next" onclick="nextTab()">Próximo →</button>
     </div>
   </div>
@@ -434,22 +439,15 @@ function ruler(name, value, unit, min, max, bands, verdictFn){
 }
 
 /* ===== NAV ===== */
-const TAB_ORDER=['banco','anamnese','antro','neuro','func','aptidao','relatorio'];
-const TAB_LABELS={banco:'Banco',anamnese:'Anamnese',antro:'Antropometria',neuro:'Neuromotor',func:'Funcional',aptidao:'Aptidão',relatorio:'Relatório'};
+const TAB_ORDER=['banco','menu','anamnese','antro','neuro','func','aptidao','relatorio'];
 function setTab(t){
   state.tab=t;
   const i=TAB_ORDER.indexOf(t);
-  const tabBtns=document.querySelectorAll('.tab');
-  tabBtns.forEach((b,idx)=>b.setAttribute('aria-selected', TAB_ORDER[idx]===t));
   TAB_ORDER.forEach(o=>$('panel-'+o).classList.toggle('active', o===t));
   if(t==='relatorio') buildReport();
   window.scrollTo({top:0,behavior:'smooth'});
-  if(tabBtns[i]) tabBtns[i].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
-  $('btn-prev').disabled = i<=0;
-  $('btn-next').disabled = i>=TAB_ORDER.length-1;
-  $('panel-nav-pos').textContent = `${String(i+1).padStart(2,'0')} / ${TAB_ORDER.length} · ${TAB_LABELS[t]}`;
+  $('btn-next').classList.toggle('hidden', i>=TAB_ORDER.length-1);
 }
-function prevTab(){ const i=TAB_ORDER.indexOf(state.tab); if(i>0) setTab(TAB_ORDER[i-1]); }
 function nextTab(){ const i=TAB_ORDER.indexOf(state.tab); if(i<TAB_ORDER.length-1) setTab(TAB_ORDER[i+1]); }
 function onCatChange(){ applyCategory(); recompute(); touch(); }
 function applyCategory(){ $('antro-idoso-card').classList.toggle('hidden', cat()!=='idoso'); }
@@ -900,8 +898,6 @@ if('serviceWorker' in navigator){ window.addEventListener('load',()=>{ navigator
   buildDoencas(); buildParq(); buildSarc(); buildBfProtocols(); buildFolds(); buildFuncProtocols(); buildVo2Protocols();
   $('dataAval').valueAsDate=new Date();
   applyCategory(); recompute();
-  $('btn-prev').disabled=true;
-  $('panel-nav-pos').textContent=`01 / ${TAB_ORDER.length} · ${TAB_LABELS.banco}`;
   await HFDB.open();
   try{ records=await HFDB.getAll(); }catch(e){ records=[]; }
   renderRecords();
