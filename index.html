@@ -25,7 +25,7 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:960px;margin:0 auto;padding:0 18px 90px}
+  .wrap{max-width:960px;margin:0 auto;padding:0 18px 110px}
 
   header{background:var(--petrol-deep);color:#eef2f0;padding:calc(18px + env(safe-area-inset-top)) 18px 18px;margin-bottom:16px;border-bottom:3px solid var(--amber)}
   .head-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
@@ -36,10 +36,15 @@
   .who{font-family:var(--mono);font-size:11px;color:#9fc0c4;text-align:right;line-height:1.5}
   .who b{color:#eef2f0;font-weight:600}
 
-  .tabs{display:flex;gap:5px;margin-bottom:18px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+  .tabs{display:flex;gap:5px;margin-bottom:18px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
   .tab{flex:0 0 auto;font-family:var(--display);font-weight:700;font-size:13px;padding:10px 15px;border-radius:9px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer;white-space:nowrap}
   .tab[aria-selected=true]{background:var(--petrol);color:#fff;border-color:var(--petrol)}
   .tab .num{font-family:var(--mono);font-size:10px;opacity:.7;margin-right:5px}
+
+  .panel-nav{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);z-index:20;box-shadow:0 -2px 10px rgba(0,0,0,.06)}
+  .panel-nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 18px calc(10px + env(safe-area-inset-bottom))}
+  .panel-nav-pos{font-family:var(--mono);font-size:10.5px;color:var(--muted);text-align:center;flex:1}
+  .btn:disabled{opacity:.35;cursor:not-allowed}
 
   .panel{display:none}.panel.active{display:block}
   section.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px}
@@ -128,7 +133,7 @@
     body{background:#fff}
     header{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 10px;margin-bottom:14px}
     .brand-eyebrow{color:#555}.who{color:#333;display:block}.who b{color:#000}h1{color:#000}
-    .tabs,.actions,.noprint,.db-status,.search{display:none!important}
+    .tabs,.actions,.noprint,.db-status,.search,.panel-nav{display:none!important}
     .panel{display:none!important}
     #panel-relatorio{display:block!important}
     .card,.interp{border:1px solid #999!important;background:#fff!important;color:#000!important;box-shadow:none!important}
@@ -388,6 +393,14 @@
     </div>
   </div>
 
+  <div class="panel-nav noprint" id="panel-nav">
+    <div class="panel-nav-inner">
+      <button class="btn btn-ghost btn-sm" id="btn-prev" onclick="prevTab()">← Anterior</button>
+      <span class="panel-nav-pos" id="panel-nav-pos"></span>
+      <button class="btn btn-petrol btn-sm" id="btn-next" onclick="nextTab()">Próximo →</button>
+    </div>
+  </div>
+
   <p class="disclaimer noprint">HYBRID Fit · Ferramenta de apoio à decisão para uso profissional. Não substitui julgamento clínico nem diagnóstico médico. Dados processados e armazenados apenas neste aparelho.</p>
 </div>
 
@@ -422,13 +435,22 @@ function ruler(name, value, unit, min, max, bands, verdictFn){
 
 /* ===== NAV ===== */
 const TAB_ORDER=['banco','anamnese','antro','neuro','func','aptidao','relatorio'];
+const TAB_LABELS={banco:'Banco',anamnese:'Anamnese',antro:'Antropometria',neuro:'Neuromotor',func:'Funcional',aptidao:'Aptidão',relatorio:'Relatório'};
 function setTab(t){
   state.tab=t;
-  document.querySelectorAll('.tab').forEach((b,i)=>b.setAttribute('aria-selected', TAB_ORDER[i]===t));
+  const i=TAB_ORDER.indexOf(t);
+  const tabBtns=document.querySelectorAll('.tab');
+  tabBtns.forEach((b,idx)=>b.setAttribute('aria-selected', TAB_ORDER[idx]===t));
   TAB_ORDER.forEach(o=>$('panel-'+o).classList.toggle('active', o===t));
   if(t==='relatorio') buildReport();
   window.scrollTo({top:0,behavior:'smooth'});
+  if(tabBtns[i]) tabBtns[i].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+  $('btn-prev').disabled = i<=0;
+  $('btn-next').disabled = i>=TAB_ORDER.length-1;
+  $('panel-nav-pos').textContent = `${String(i+1).padStart(2,'0')} / ${TAB_ORDER.length} · ${TAB_LABELS[t]}`;
 }
+function prevTab(){ const i=TAB_ORDER.indexOf(state.tab); if(i>0) setTab(TAB_ORDER[i-1]); }
+function nextTab(){ const i=TAB_ORDER.indexOf(state.tab); if(i<TAB_ORDER.length-1) setTab(TAB_ORDER[i+1]); }
 function onCatChange(){ applyCategory(); recompute(); touch(); }
 function applyCategory(){ $('antro-idoso-card').classList.toggle('hidden', cat()!=='idoso'); }
 function onSexChange(){ buildFolds(); recompute(); touch(); }
@@ -756,6 +778,7 @@ function applyRecord(r){
   currentId=r.id; state.dirty=false; recompute();
 }
 function newRecord(){
+  if(state.dirty && !confirm('Há alterações não salvas no avaliado atual. Descartar e criar um novo?')) return;
   currentId=null;
   IDENT.concat(ANAM,ANTRO,NEURO,FUNC,APT).forEach(k=>{if($(k))$(k).value='';});
   $('sexo').value='M'; $('categoria').value='idoso'; $('dataAval').valueAsDate=new Date();
@@ -772,7 +795,10 @@ async function saveCurrent(){
     flash(HFDB.mode()==='indexeddb'?'Avaliação salva no banco local.':'Salva nesta sessão. Exporte para backup.');
   }catch(e){ alert('Falha ao salvar: '+e); }
 }
-function loadRecord(id){ const r=records.find(x=>x.id===id); if(r){ applyRecord(JSON.parse(JSON.stringify(r))); renderRecords(); setTab('anamnese'); } }
+function loadRecord(id){
+  if(id!==currentId && state.dirty && !confirm('Há alterações não salvas no avaliado atual. Descartar e trocar de avaliado?')) return;
+  const r=records.find(x=>x.id===id); if(r){ applyRecord(JSON.parse(JSON.stringify(r))); renderRecords(); setTab('anamnese'); }
+}
 async function delRecord(id,ev){ ev.stopPropagation(); if(!confirm('Excluir este avaliado do banco?')) return;
   try{ await HFDB.remove(id); if(currentId===id)currentId=null; records=await HFDB.getAll(); renderRecords(); }catch(e){ alert('Falha ao excluir: '+e); } }
 function renderRecords(){
@@ -861,6 +887,8 @@ function buildReport(){
   $('report-body').innerHTML=h;
 }
 
+window.addEventListener('beforeunload', e=>{ if(state.dirty){ e.preventDefault(); e.returnValue=''; } });
+
 /* ===== PWA: instalação + service worker ===== */
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); deferredPrompt=e; $('btn-install').classList.remove('hidden'); });
@@ -872,6 +900,8 @@ if('serviceWorker' in navigator){ window.addEventListener('load',()=>{ navigator
   buildDoencas(); buildParq(); buildSarc(); buildBfProtocols(); buildFolds(); buildFuncProtocols(); buildVo2Protocols();
   $('dataAval').valueAsDate=new Date();
   applyCategory(); recompute();
+  $('btn-prev').disabled=true;
+  $('panel-nav-pos').textContent=`01 / ${TAB_ORDER.length} · ${TAB_LABELS.banco}`;
   await HFDB.open();
   try{ records=await HFDB.getAll(); }catch(e){ records=[]; }
   renderRecords();
