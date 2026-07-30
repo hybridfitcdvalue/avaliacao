@@ -2,7 +2,7 @@
    Estratégia: cache-first para os arquivos do app (funciona
    offline). Ao publicar uma nova versão, altere CACHE_VERSION
    — o app instalado se atualiza sozinho na próxima abertura. */
-const CACHE_VERSION = 'hybridfit-v1';
+const CACHE_VERSION = 'hybridfit-v2';
 const ASSETS = [
   './',
   './index.html',
