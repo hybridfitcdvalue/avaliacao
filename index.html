@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>HYBRID Fit — Avaliação Físico-Funcional</title>
-<meta name="theme-color" content="#0a3138">
+<meta name="theme-color" content="#0a2e36">
 <meta name="description" content="Avaliação físico-funcional para idosos, adultos e atletas.">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
@@ -17,9 +17,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#131d1b;--paper:#f5f3ec;--surface:#ffffff;--line:#d9d6cb;
-    --petrol:#0e4a54;--petrol-deep:#0a3138;--amber:#b8791a;
-    --good:#2c7a55;--warn:#c08319;--alert:#b03e2a;--muted:#5f6b67;
+    --ink:#141f1d;--paper:#f6f3ea;--surface:#ffffff;--line:#dcd7c9;
+    --petrol:#0f5864;--petrol-deep:#0a2e36;--petrol-glow:#12707d;--amber:#d9791e;--amber-soft:#f2a44a;
+    --good:#1f8a5a;--warn:#d1890f;--alert:#c23f2b;--muted:#5f6b67;
     --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',system-ui,sans-serif;--display:'Archivo',system-ui,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -27,7 +27,7 @@
   body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
   .wrap{max-width:960px;margin:0 auto;padding:0 18px 110px}
 
-  header{background:var(--petrol-deep);color:#eef2f0;padding:calc(18px + env(safe-area-inset-top)) 18px 18px;margin-bottom:16px;border-bottom:3px solid var(--amber)}
+  header{background:linear-gradient(135deg,var(--petrol-deep),#0e4650);color:#eef2f0;padding:calc(18px + env(safe-area-inset-top)) 18px 18px;margin-bottom:16px;border-bottom:3px solid var(--amber)}
   .head-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
   .brand{display:flex;align-items:center;gap:12px;cursor:pointer}
   .brand:active{opacity:.75}
@@ -37,18 +37,19 @@
   .who{font-family:var(--mono);font-size:11px;color:#9fc0c4;text-align:right;line-height:1.5}
   .who b{color:#eef2f0;font-weight:600}
 
-  .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-  .menu-card{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;font-family:var(--sans);padding:14px 15px;border:1px solid var(--line);border-radius:11px;background:#fcfbf7;cursor:pointer}
-  .menu-card:active{background:#f0f6f5;border-color:var(--petrol)}
-  .menu-card-num{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--amber);font-weight:600}
-  .menu-card-title{font-family:var(--display);font-weight:700;font-size:15px;color:var(--ink)}
-  .menu-card-sub{font-size:11.5px;color:var(--muted);line-height:1.35}
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .menu-card{display:flex;flex-direction:column;align-items:flex-start;gap:9px;text-align:left;font-family:var(--sans);padding:18px 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface);cursor:pointer;box-shadow:0 1px 2px rgba(10,46,54,.05);transition:transform .15s,box-shadow .15s,border-color .15s}
+  .menu-card:hover{border-color:var(--petrol-glow);box-shadow:0 6px 16px rgba(10,46,54,.1);transform:translateY(-1px)}
+  .menu-card:active{transform:translateY(0);box-shadow:0 1px 2px rgba(10,46,54,.06)}
+  .menu-card-num{display:inline-flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:50%;background:var(--petrol-deep);color:#fff;font-family:var(--mono);font-size:11px;font-weight:600}
+  .menu-card-title{font-family:var(--display);font-weight:700;font-size:15.5px;color:var(--ink)}
+  .menu-card-sub{font-size:11.5px;color:var(--muted);line-height:1.4}
 
   .panel-nav{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);z-index:20;box-shadow:0 -2px 10px rgba(0,0,0,.06)}
-  .panel-nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:10px 18px calc(10px + env(safe-area-inset-bottom))}
+  .panel-nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 18px calc(10px + env(safe-area-inset-bottom))}
 
   .panel{display:none}.panel.active{display:block}
-  section.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px}
+  section.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(10,46,54,.05),0 1px 8px rgba(10,46,54,.04)}
   .card h2{font-family:var(--display);font-weight:700;font-size:16px;margin-bottom:3px}
   .card h2 .tag{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-left:8px;vertical-align:middle}
   .card .sub{font-size:12.5px;color:var(--muted);margin-bottom:15px}
@@ -90,9 +91,13 @@
   .refs{font-size:10.5px;color:var(--muted);line-height:1.55;font-family:var(--mono);margin-top:4px}
   .refs strong{color:var(--ink);font-weight:600}
 
-  .chips{display:flex;gap:6px;flex-wrap:wrap}
-  .chip{font-family:var(--mono);font-size:11px;padding:6px 11px;border:1px solid var(--line);border-radius:7px;background:#fcfbf7;cursor:pointer;color:var(--ink)}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{font-family:var(--sans);font-weight:600;font-size:12.5px;padding:9px 15px;border:1.5px solid var(--line);border-radius:20px;background:var(--surface);cursor:pointer;color:var(--ink);transition:background .15s,border-color .15s,color .15s}
+  .chip:active{transform:translateY(1px)}
   .chip[aria-pressed=true]{background:var(--petrol);color:#fff;border-color:var(--petrol)}
+  .chip-protocol[aria-pressed=true]{background:var(--amber);color:#241703;border-color:var(--amber)}
+
+  .proto-desc{font-size:12px;color:var(--muted);line-height:1.4;margin:6px 0 2px}
 
   .qrow{padding:10px 0;border-top:1px solid #ededed}.qrow:first-child{border-top:none}
   .qrow p{font-size:13px;font-weight:500;margin-bottom:7px}
@@ -164,12 +169,15 @@
       <h2>Banco de avaliados</h2>
       <p class="sub">Dados gravados apenas neste aparelho (IndexedDB). Use Exportar para backup e para transferir a outro dispositivo.</p>
       <div class="db-status" id="db-status"></div>
+      <div class="grid g2" style="margin-bottom:14px">
+        <button class="btn btn-primary" onclick="newRecord()">+ Novo avaliado</button>
+        <button class="btn btn-petrol" onclick="saveCurrent()">Salvar avaliação atual</button>
+      </div>
+      <label>Backup e transferência</label>
       <div class="actions" style="margin-bottom:14px">
-        <button class="btn btn-primary btn-sm" onclick="newRecord()">+ Novo avaliado</button>
-        <button class="btn btn-petrol btn-sm" onclick="saveCurrent()">Salvar avaliação atual</button>
-        <button class="btn btn-ghost btn-sm" onclick="exportJSON()">Exportar (.json)</button>
-        <button class="btn btn-ghost btn-sm" onclick="exportCSV()">Exportar planilha (.csv)</button>
-        <label class="btn btn-ghost btn-sm" style="cursor:pointer;display:inline-block">Importar (.json)
+        <button class="btn btn-ghost btn-sm" onclick="exportJSON()">Exportar</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportCSV()">Exportar planilha</button>
+        <label class="btn btn-ghost btn-sm" style="cursor:pointer;display:inline-block">Importar
           <input type="file" accept="application/json,.json" style="display:none" onchange="importJSON(event)">
         </label>
         <button class="btn btn-ghost btn-sm hidden" id="btn-install" onclick="doInstall()">Instalar app</button>
@@ -267,9 +275,10 @@
     <section class="card">
       <h2>Composição corporal <span class="tag">dobras cutâneas</span></h2>
       <p class="sub">Escolha o protocolo. As dobras solicitadas se ajustam automaticamente.</p>
-      <label>Protocolo</label>
-      <div class="chips" id="bf-protocols" style="margin-bottom:14px"></div>
-      <div class="grid g4" id="fold-grid"></div>
+      <label for="bf-protocols">Protocolo</label>
+      <select id="bf-protocols" onchange="setBfProto(this.value)"></select>
+      <p class="proto-desc" id="bf-protocol-desc"></p>
+      <div class="grid g4" id="fold-grid" style="margin-top:10px"></div>
       <p class="refs" id="fold-hint" style="margin-top:8px"></p>
       <div id="bf-results" style="margin-top:8px"></div>
     </section>
@@ -305,8 +314,9 @@
     <section class="card">
       <h2>Avaliação funcional <span class="tag">idosos</span></h2>
       <p class="sub">Selecione o protocolo desejado.</p>
-      <label>Protocolo</label>
-      <div class="chips" id="func-protocols" style="margin-bottom:6px"></div>
+      <label for="func-protocols">Protocolo</label>
+      <select id="func-protocols" onchange="setFuncProto(this.value)"></select>
+      <p class="proto-desc" id="func-protocol-desc"></p>
     </section>
 
     <div id="proto-ewgsop2">
@@ -353,8 +363,9 @@
     <section class="card">
       <h2>Aptidão cardiorrespiratória <span class="tag">adulto 25–55</span></h2>
       <p class="sub">Estimativa de VO₂máx. Selecione o protocolo aplicado.</p>
-      <label>Protocolo</label>
-      <div class="chips" id="vo2-protocols" style="margin-bottom:14px"></div>
+      <label for="vo2-protocols">Protocolo</label>
+      <select id="vo2-protocols" onchange="setVo2Proto(this.value)"></select>
+      <p class="proto-desc" id="vo2-protocol-desc" style="margin-bottom:10px"></p>
 
       <div id="vo2-cooper" class="vo2-inputs">
         <div class="grid g2"><div><label for="cooperDist">Distância em 12 min (m)</label><input id="cooperDist" type="number" step="1" min="0" placeholder="—" oninput="recompute()"></div></div>
@@ -402,6 +413,7 @@
 
   <div class="panel-nav noprint" id="panel-nav">
     <div class="panel-nav-inner">
+      <button class="btn btn-ghost btn-sm" id="btn-prev" onclick="setTab('menu')">← Anterior</button>
       <button class="btn btn-petrol btn-sm" id="btn-next" onclick="nextTab()">Próximo →</button>
     </div>
   </div>
@@ -447,6 +459,7 @@ function setTab(t){
   if(t==='relatorio') buildReport();
   window.scrollTo({top:0,behavior:'smooth'});
   $('btn-next').classList.toggle('hidden', i>=TAB_ORDER.length-1);
+  $('btn-prev').classList.toggle('hidden', t==='banco'||t==='menu');
 }
 function nextTab(){ const i=TAB_ORDER.indexOf(state.tab); if(i<TAB_ORDER.length-1) setTab(TAB_ORDER[i+1]); }
 function onCatChange(){ applyCategory(); recompute(); touch(); }
@@ -501,12 +514,15 @@ function sarcScore(){ const v=Object.values(sarc); return v.some(x=>x===null)?nu
 
 /* ===== COMPOSIÇÃO ===== */
 const bfProtocols={
-  jp3:{nome:'Jackson & Pollock (3)', sites:{M:['peitoral','abdominal','coxa'],F:['triceps','suprailiaca','coxa']}},
-  jp7:{nome:'Jackson & Pollock (7)', sites:{M:['peitoral','axilarmedia','triceps','subescapular','abdominal','suprailiaca','coxa'],F:['peitoral','axilarmedia','triceps','subescapular','abdominal','suprailiaca','coxa']}},
-  faulkner:{nome:'Faulkner (4)', sites:{M:['triceps','subescapular','suprailiaca','abdominal'],F:['triceps','subescapular','suprailiaca','abdominal']}}
+  jp3:{nome:'Jackson & Pollock (3)', desc:'Protocolo rápido com 3 dobras cutâneas. Boa relação custo-benefício para triagens de rotina.', sites:{M:['peitoral','abdominal','coxa'],F:['triceps','suprailiaca','coxa']}},
+  jp7:{nome:'Jackson & Pollock (7)', desc:'Protocolo completo com 7 dobras cutâneas. Maior precisão, porém exige mais tempo de medição.', sites:{M:['peitoral','axilarmedia','triceps','subescapular','abdominal','suprailiaca','coxa'],F:['peitoral','axilarmedia','triceps','subescapular','abdominal','suprailiaca','coxa']}},
+  faulkner:{nome:'Faulkner (4)', desc:'Usa 4 dobras cutâneas com equação simplificada. Prático para acompanhar grupos numerosos.', sites:{M:['triceps','subescapular','suprailiaca','abdominal'],F:['triceps','subescapular','suprailiaca','abdominal']}}
 };
 const siteNames={peitoral:'Peitoral',abdominal:'Abdominal',coxa:'Coxa',triceps:'Tríceps',suprailiaca:'Suprailíaca',axilarmedia:'Axilar média',subescapular:'Subescapular'};
-function buildBfProtocols(){ $('bf-protocols').innerHTML=Object.keys(bfProtocols).map(k=>`<button class="chip" aria-pressed="${k===state.bfProto}" onclick="setBfProto('${k}')">${bfProtocols[k].nome}</button>`).join(''); }
+function buildBfProtocols(){
+  $('bf-protocols').innerHTML=Object.keys(bfProtocols).map(k=>`<option value="${k}" ${k===state.bfProto?'selected':''}>${bfProtocols[k].nome}</option>`).join('');
+  $('bf-protocol-desc').textContent=bfProtocols[state.bfProto].desc;
+}
 function setBfProto(k){ state.bfProto=k; buildBfProtocols(); buildFolds(); recompute(); touch(); }
 function currentSites(){ return bfProtocols[state.bfProto].sites[sex()]; }
 function buildFolds(){
@@ -536,9 +552,13 @@ function bfVerdict(bf){
 }
 
 /* ===== FUNCIONAL ===== */
+const funcProtocols={
+  ewgsop2:{nome:'Rastreio EWGSOP2 + SARC-F', desc:'Combina força, velocidade de marcha e o questionário SARC-F para rastrear sarcopenia. Indicado como triagem inicial.'},
+  sppb:{nome:'SPPB (0–12)', desc:'Bateria de desempenho físico com equilíbrio, marcha e sentar-levantar, pontuada de 0 a 12. Avalia mobilidade funcional global.'}
+};
 function buildFuncProtocols(){
-  const opts={ewgsop2:'Rastreio EWGSOP2 + SARC-F', sppb:'SPPB (0–12)'};
-  $('func-protocols').innerHTML=Object.keys(opts).map(k=>`<button class="chip" aria-pressed="${k===state.catFunc}" onclick="setFuncProto('${k}')">${opts[k]}</button>`).join('');
+  $('func-protocols').innerHTML=Object.keys(funcProtocols).map(k=>`<option value="${k}" ${k===state.catFunc?'selected':''}>${funcProtocols[k].nome}</option>`).join('');
+  $('func-protocol-desc').textContent=funcProtocols[state.catFunc].desc;
 }
 function setFuncProto(k){ state.catFunc=k; buildFuncProtocols(); $('proto-ewgsop2').classList.toggle('hidden',k!=='ewgsop2'); $('proto-sppb').classList.toggle('hidden',k!=='sppb'); recompute(); touch(); }
 function sppbScore(){
@@ -552,9 +572,14 @@ function sppbScore(){
 }
 
 /* ===== APTIDÃO / VO2 ===== */
+const vo2Protocols={
+  cooper:{nome:'Cooper 12 min', desc:'Corrida/caminhada de 12 minutos medindo a distância percorrida. Requer só um percurso plano medido.'},
+  rockport:{nome:'Rockport 1 milha', desc:'Caminhada de 1 milha cronometrada com FC final. Indicado para pessoas menos condicionadas.'},
+  step:{nome:'Step test (Queens)', desc:'Sobe e desce um banco de 41 cm por 3 minutos, medindo a FC de recuperação. Exige pouco espaço.'}
+};
 function buildVo2Protocols(){
-  const o={cooper:'Cooper 12 min',rockport:'Rockport 1 milha',step:'Step test (Queens)'};
-  $('vo2-protocols').innerHTML=Object.keys(o).map(k=>`<button class="chip" aria-pressed="${k===state.vo2Proto}" onclick="setVo2Proto('${k}')">${o[k]}</button>`).join('');
+  $('vo2-protocols').innerHTML=Object.keys(vo2Protocols).map(k=>`<option value="${k}" ${k===state.vo2Proto?'selected':''}>${vo2Protocols[k].nome}</option>`).join('');
+  $('vo2-protocol-desc').textContent=vo2Protocols[state.vo2Proto].desc;
 }
 function setVo2Proto(k){ state.vo2Proto=k; buildVo2Protocols(); ['cooper','rockport','step'].forEach(p=>$('vo2-'+p).classList.toggle('hidden',p!==k)); recompute(); touch(); }
 function vo2max(){
@@ -784,7 +809,7 @@ function newRecord(){
   state.bfProto='jp3'; state.catFunc='ewgsop2'; state.vo2Proto='cooper';
   buildDoencas(); buildParq(); buildSarc(); buildBfProtocols(); buildFolds();
   setFuncProto('ewgsop2'); setVo2Proto('cooper'); applyCategory();
-  state.dirty=false; recompute(); setTab('anamnese');
+  state.dirty=false; recompute(); setTab('menu');
 }
 async function saveCurrent(){
   if(!val('nome').trim()){ alert('Informe o nome do avaliado antes de salvar.'); setTab('anamnese'); return; }
